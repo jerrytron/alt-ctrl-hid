@@ -1,4 +1,3 @@
-
 // See this link for a comprehensive guide:
 // https://www.pjrc.com/teensy/td_keyboard.html
 
@@ -87,6 +86,8 @@ const uint8_t kTouchPinCount = 12;
 // The list of Teensy touch sense pin numbers.
 const uint8_t kTouchPins[] = { 0, 1, 15, 16, 17, 18, 19, 22, 23, 25, 32, 33 };
 const bool kTouchPinsActive[] = { true, false, false, false, false, false, false, false, false, false, false, false };
+// By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
+const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false };
 // Threshold values relating to each of the touch pins.
 const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
 const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER };
@@ -114,9 +115,12 @@ const uint8_t kButtonPinCount = 13;
 // The list of digital pins for buttons.
 // Pin 6 might need a 1k resistor pullup.
 const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+// By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
+const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC };
 // Store debouncing objects for buttons.
 Bounce* _buttons[kButtonPinCount];
+
 
 // If true, we are using touch sense pins as intended.
 // If false, they will be configured as buttons.
@@ -161,7 +165,11 @@ void loop() {
         Serial.print(", Key Val: ");
         Serial.println(kButtonKeys[i]);
       }
-      Keyboard.press(kButtonKeys[i]);
+      if (kButtonPinsReverse[i]) {
+        Keyboard.release(kButtonKeys[i]);
+      } else {
+        Keyboard.press(kButtonKeys[i]);
+      }
     } else if (_buttons[i]->risingEdge()) {
       if (kDebugBtnEvents) {
         Serial.print("Btn Release - Pin: ");
@@ -169,7 +177,11 @@ void loop() {
         Serial.print(", Key Val: ");
         Serial.println(kButtonKeys[i]);
       }
-      Keyboard.release(kButtonKeys[i]);
+      if (kButtonPinsReverse[i]) {
+        Keyboard.press(kButtonKeys[i]);
+      } else {
+        Keyboard.release(kButtonKeys[i]);
+      }
     }
 
     /*if ((kRisingEdge && _buttons[i]->risingEdge()) ||
@@ -190,7 +202,11 @@ void loop() {
           Serial.print(", Key Val: ");
           Serial.println(kTouchKeys[i]);
         }
-        Keyboard.press(kTouchKeys[i]);
+        if (kTouchPinsReverse[i]) {
+          Keyboard.release(kTouchKeys[i]);
+        } else {
+          Keyboard.press(kTouchKeys[i]);
+        }
       } else if (_touchButtons[i]->risingEdge()) {
         if (kDebugBtnEvents) {
           Serial.print("TBtn Release - Pin: ");
@@ -198,7 +214,11 @@ void loop() {
           Serial.print(", Key Val: ");
           Serial.println(kTouchKeys[i]);
         }
-        Keyboard.release(kTouchKeys[i]);
+        if (kTouchPinsReverse[i]) {
+          Keyboard.press(kTouchKeys[i]);
+        } else {
+          Keyboard.release(kTouchKeys[i]);
+        }
       }
     }
   } else {
@@ -207,7 +227,7 @@ void loop() {
       // Check to see if we are using this touch sense pin.
       // If not, skip it.
       if (!kTouchPinsActive[i]) {
-        continue;
+        //continue;
       }
       
       // Get the current analogue value of the touch sense pin.
@@ -257,7 +277,7 @@ void loop() {
               Serial.print(", Key Val: ");
               Serial.println(kTouchKeys[i]);
             }
-            Keyboard.press(kTouchKeys[i]);
+            Keyboard.release(kTouchKeys[i]);
           }
         }
       }
