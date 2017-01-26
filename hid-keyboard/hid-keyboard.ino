@@ -99,7 +99,7 @@ const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 
 const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER };
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
-// Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
+// Use one or more, separating with the logic OR operator. For example: MODIFIERKEY_CTRL | MODIFIERKEY_ALT
 const uint16_t kTouchMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 // How often in millis the debug print should print.
 uint16_t kTouchDebugMillis = 500;
