@@ -90,7 +90,7 @@ void loop() {
     } else if (valueX > kMoveThresholdHigh) {
       // Map our read value from one range to another. Our value range is about 50 to 512,
       // and we want the equivalent value in the range of our min and max mouse movement.
-      moveX = map(valueX, kMoveThresholdLow, kOffsetValue, kMinMouseMove, kMaxMouseMove);
+      moveX = map(valueX, kMoveThresholdHigh, kOffsetValue, kMinMouseMove, kMaxMouseMove);
       if (kDebug && !kAxisXOff) {
         Serial.print("Value ");
         Serial.print(valueX);
@@ -130,7 +130,7 @@ void loop() {
     } else if (valueX > kMoveThresholdHigh) {
       // Map our read value from one range to another. Our value range is about 50 to 512,
       // and we want the equivalent value in the range of our min and max mouse movement.
-      moveY = map(valueY, kMoveThresholdLow, kOffsetValue, kMinMouseMove, kMaxMouseMove);
+      moveY = map(valueY, kMoveThresholdHigh, kOffsetValue, kMinMouseMove, kMaxMouseMove);
       if (kDebug && !kAxisYOff) {
         Serial.print("Value ");
         Serial.print(valueY);
