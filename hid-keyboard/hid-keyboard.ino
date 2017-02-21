@@ -124,6 +124,7 @@ const uint8_t kButtonPinCount = 13;
 // All Digital Pins (excluding touch pins): 2 - 14, 20, 21, (underside pad ->) 24, 26 - 28, 29 - 31
 // The list of digital pins for buttons.
 // Pin 6 might need a 1k resistor pullup.
+// Pin 13 may be stick on 'press' because of the LED. Would need to cut the pin line to the LED for reliability.
 const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
 const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -132,7 +133,7 @@ const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_U
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
 // Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
-const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 // Store debouncing objects for buttons.
 Bounce* _buttons[kButtonPinCount];
 

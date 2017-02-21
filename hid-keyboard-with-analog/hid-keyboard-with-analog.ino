@@ -125,6 +125,8 @@ const uint8_t kButtonPinCount = 13;
 // The list of digital pins for buttons.
 // Pin 6 might need a 1k resistor pullup.
 const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+// Which button pins are being used for your controller? Associated with the pins just above.
+const bool kButtonPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false, false };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
 const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 // List which keyboard keys are associated with each digital pin.
@@ -132,9 +134,25 @@ const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_U
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
 // Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
-const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 // Store debouncing objects for buttons.
 Bounce* _buttons[kButtonPinCount];
+
+
+// Total count of pins used for buttons.
+const uint8_t kAnalogPinCount = 11;
+// The list of Teensy analog pin numbers (that have easy access).
+const uint8_t kAnalogPins[] = { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A14 };
+// Which pins are being used for your controller? Associated with the pins just above.
+const bool kAnalogPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false };
+// List which keyboard keys are associated with each digital pin.
+const uint16_t kAnalogKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
+// List which modifier keys are to be used with the above key.
+// Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
+// Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
+const uint16_t kAnalogMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+// Store debouncing objects for buttons.
+Bounce* _analogPots[kAnalogPinCount];
 
 
 // The number of milliseconds to debounce touch sensing.
@@ -150,6 +168,7 @@ void setup() {
   Serial.begin(9600);
   
   for (uint8_t i = 0; i < kButtonPinCount; ++i) {
+    if (
     pinMode(kButtonPins[i], INPUT_PULLUP);
     _buttons[i] = new Bounce(kButtonPins[i], kBtnDebounceMillis);
   }
