@@ -160,6 +160,6 @@ void loop() {
   // Only perform update logic every interval.
   if (_updateElapsed >= kIntervalUpdateMillis) {
     _updateElapsed = 0;
-    Mouse.move(_lastMoveX, 0);
+    Mouse.move(_lastMoveX, _lastMoveY);
   }
 }
