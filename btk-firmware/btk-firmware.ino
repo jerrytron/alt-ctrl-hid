@@ -84,19 +84,37 @@ const bool kDebugBtnEvents   = true;
 // If false, they will be configured as buttons.
 const bool kTouchActive = true;
 
+#if defined(__MK20DX256__) // Using Teensy 3.1/3.2
 // Total count of touch sense pins we are managing.
-const uint8_t kTouchPinCount = 12;
-// All Touch Sense Pins: 0, 1, 15 - 19, 22, 23, (underside pad ->) 25, 32, 33
+const uint8_t kTouchPinCount = 9;
+// All Touch Sense Pins: 0, 1, 15 - 19, 22, 23, (not using underside pad ->) 25, 32, 33
 // The list of Teensy touch sense pin numbers.
-const uint8_t kTouchPins[] = { 0, 1, 15, 16, 17, 18, 19, 22, 23, 25, 32, 33 };
+const uint8_t kTouchPins[] = { 0, 1, 15, 16, 17, 18, 19, 22, 23 };
 // Which touch pins are being used for your controller? Associated with the pins just above.
-const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false, false };
+const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
-const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false };
+const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false };
 // Threshold values relating to each of the touch pins.
-const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
+const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
 // List which keyboard keys are associated with each touch pin.
-const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER };
+const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
+
+#elif defined(__MKL26Z64__) // Using Teensy LC
+// Total count of touch sense pins we are managing.
+const uint8_t kTouchPinCount = 11;
+// All Touch Sense Pins: 0, 1, 3, 4, 15 - 19, 22, 23
+// The list of Teensy touch sense pin numbers.
+const uint8_t kTouchPins[] = { 0, 1, 3, 4, 15, 16, 17, 18, 19, 22, 23 };
+// Which touch pins are being used for your controller? Associated with the pins just above.
+const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false };
+// By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
+const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false };
+// Threshold values relating to each of the touch pins.
+const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
+// List which keyboard keys are associated with each touch pin.
+const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
+#endif
+
 // How often in millis the debug print should print.
 uint16_t kTouchDebugMillis = 500;
 
@@ -114,17 +132,30 @@ uint32_t _touchDebugTime = 0;
 // If we don't use touch, we need to store debouncing objects.
 Bounce* _touchButtons[kTouchPinCount];
 
-
+#if defined(__MK20DX256__) // Using Teensy 3.1/3.2
 // Total count of pins used for buttons.
-const uint8_t kButtonPinCount = 13;
-// All Digital Pins (excluding touch pins): 2 - 14, 20, 21, (underside pad ->) 24, 26 - 28, 29 - 31
+const uint8_t kButtonPinCount = 15;
+// All Digital Pins (excluding touch pins): 2 - 14, 20, 21, (not using underside pad ->) 24, 26 - 28, 29 - 31
 // The list of digital pins for buttons.
 // Pin 6 might need a 1k resistor pullup.
-const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 21 };
+// By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
+const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+// List which keyboard keys are associated with each digital pin.
+const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC, KEYPAD_0, KEYPAD_1 };
+
+#elif defined(__MKL26Z64__) // Using Teensy LC
+// Total count of pins used for buttons.
+const uint8_t kButtonPinCount = 13;
+// All Digital Pins (excluding touch pins): 2, 5 - 14, 20, 21
+// The list of digital pins for buttons.
+const uint8_t kButtonPins[] = { 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 21 };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
 const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 // List which keyboard keys are associated with each digital pin.
 const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC };
+#endif
+
 // Store debouncing objects for buttons.
 Bounce* _buttons[kButtonPinCount];
 
@@ -186,11 +217,6 @@ void loop() {
         Keyboard.release(kButtonKeys[i]);
       }
     }
-
-    /*if ((kRisingEdge && _buttons[i]->risingEdge()) ||
-        !kRisingEdge && _buttons[i]->fallingEdge()) {
-      
-    }*/
   }
 
   // If you don't want to use touch at all, set them up as buttons.
