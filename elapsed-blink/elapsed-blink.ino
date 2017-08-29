@@ -25,7 +25,13 @@ elapsedMillis sinceBlinkMicros;
 bool ledState = LOW;
 
 // The setup routine runs once when you press reset.
-void setup() {                
+void setup() {
+  // The following lines of code are to check to make
+  // sure you are setup to emulate devices like the keyboard
+  // and mouse!
+  Mouse.screenSize(1920, 1080);
+  Keyboard.set_modifier(0);
+  
   // Initialize the digital pin as an output.
   pinMode(kLedPin, OUTPUT);     
 }
