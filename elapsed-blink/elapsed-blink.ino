@@ -20,7 +20,7 @@ elapsedMillis sinceBlinkMillis;
 
 // How much time has passed in microseconds.
 // 1000000 microseconds = 1000 milliseconds = 1 second
-elapsedMillis sinceBlinkMicros;
+elapsedMicros sinceBlinkMicros;
 
 bool ledState = LOW;
 
@@ -29,6 +29,7 @@ void setup() {
   // The following lines of code are to check to make
   // sure you are setup to emulate devices like the keyboard
   // and mouse!
+  //while (!Serial.available()) {}
   Mouse.screenSize(1920, 1080);
   Keyboard.set_modifier(0);
   
@@ -40,6 +41,7 @@ void setup() {
 void loop() {
 
   if (sinceBlinkMillis >= kFrequencyMillis) {
+    sinceBlinkMillis = 0;
     if (ledState == LOW) {
       ledState = HIGH;
     } else {
@@ -49,6 +51,7 @@ void loop() {
   }
   
   /*if (sinceBlinkMicros >= kFrequencyMicros) {
+   * sinceBlinkMicros = 0;
     if (ledState == LOW) {
       ledState = HIGH;
     } else {
