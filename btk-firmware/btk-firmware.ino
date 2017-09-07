@@ -98,6 +98,10 @@ const bool kTouchPinsReverse[] = { false, false, false, false, false, false, fal
 const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
 // List which keyboard keys are associated with each touch pin.
 const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
+// List which modifier keys are to be used with the above key.
+// Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
+// Use one or more, separating with the logic OR operator. For example: MODIFIERKEY_CTRL | MODIFIERKEY_ALT
+const uint16_t kTouchMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 #elif defined(__MKL26Z64__) // Using Teensy LC
 // Total count of touch sense pins we are managing.
@@ -113,6 +117,10 @@ const bool kTouchPinsReverse[] = { false, false, false, false, false, false, fal
 const uint16_t kTouchThresholds[] = { 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500 };
 // List which keyboard keys are associated with each touch pin.
 const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
+// List which modifier keys are to be used with the above key.
+// Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
+// Use one or more, separating with the logic OR operator. For example: MODIFIERKEY_CTRL | MODIFIERKEY_ALT
+const uint16_t kTouchMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
 
 // How often in millis the debug print should print.
@@ -143,6 +151,10 @@ const uint8_t kButtonPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 
 const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 // List which keyboard keys are associated with each digital pin.
 const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC, KEYPAD_0, KEYPAD_1 };
+// List which modifier keys are to be used with the above key.
+// Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
+// Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
+const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 #elif defined(__MKL26Z64__) // Using Teensy LC
 // Total count of pins used for buttons.
@@ -154,6 +166,10 @@ const uint8_t kButtonPins[] = { 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 20, 21 };
 const bool kButtonPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 // List which keyboard keys are associated with each digital pin.
 const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC };
+// List which modifier keys are to be used with the above key.
+// Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
+// Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
+const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
 
 // Store debouncing objects for buttons.
@@ -202,7 +218,9 @@ void loop() {
       if (kButtonPinsReverse[i]) {
         Keyboard.release(kButtonKeys[i]);
       } else {
+        Keyboard.set_modifier(kButtonMods[i]);
         Keyboard.press(kButtonKeys[i]);
+        Keyboard.set_modifier(0);
       }
     } else if (_buttons[i]->risingEdge()) {
       if (kDebugBtnEvents) {
@@ -212,7 +230,9 @@ void loop() {
         Serial.println(kButtonKeys[i]);
       }
       if (kButtonPinsReverse[i]) {
+        Keyboard.set_modifier(kButtonMods[i]);
         Keyboard.press(kButtonKeys[i]);
+        Keyboard.set_modifier(0);
       } else {
         Keyboard.release(kButtonKeys[i]);
       }
@@ -234,7 +254,9 @@ void loop() {
         if (kTouchPinsReverse[i]) {
           Keyboard.release(kTouchKeys[i]);
         } else {
+          Keyboard.set_modifier(kTouchMods[i]);
           Keyboard.press(kTouchKeys[i]);
+          Keyboard.set_modifier(0);
         }
       } else if (_touchButtons[i]->risingEdge()) {
         if (kDebugBtnEvents) {
@@ -244,7 +266,9 @@ void loop() {
           Serial.println(kTouchKeys[i]);
         }
         if (kTouchPinsReverse[i]) {
+          Keyboard.set_modifier(kTouchMods[i]);
           Keyboard.press(kTouchKeys[i]);
+          Keyboard.set_modifier(0);
         } else {
           Keyboard.release(kTouchKeys[i]);
         }
@@ -298,7 +322,9 @@ void loop() {
               Serial.print(", Key Val: ");
               Serial.println(kTouchKeys[i]);
             }
+            Keyboard.set_modifier(kTouchMods[i]);
             Keyboard.press(kTouchKeys[i]);
+            Keyboard.set_modifier(0);
           } else {
             if (kDebugTouchEvents) {
               Serial.print("Touch Release - Pin: ");

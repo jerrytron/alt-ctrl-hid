@@ -11,8 +11,8 @@
 // give it a name:
 const int kLedPin = 13;
 
-const int kFrequencyMillis = 2000; // Blink on/off every 2 seconds.
-const int kFrequencyMicros = 2000000; // Blink on/off every 2 seconds.
+const int kFrequencyMillis = 1000; // Blink on/off every 1 seconds.
+const int kFrequencyMicros = 1000000; // Blink on/off every 1 seconds.
 
 // How much time has passed in milliseconds.
 // 1000 milliseconds = 1 second
@@ -51,7 +51,7 @@ void loop() {
   }
   
   /*if (sinceBlinkMicros >= kFrequencyMicros) {
-   * sinceBlinkMicros = 0;
+    sinceBlinkMicros = 0;
     if (ledState == LOW) {
       ledState = HIGH;
     } else {
