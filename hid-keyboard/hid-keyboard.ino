@@ -1,5 +1,6 @@
 // See this link for a comprehensive guide:
 // https://www.pjrc.com/teensy/td_keyboard.html
+// Scroll down to All Keys Codes
 
 // MOUSE MOVEMENT
 //
@@ -113,7 +114,7 @@ const uint8_t kTouchPinCount = 11;
 // The list of Teensy touch sense pin numbers.
 const uint8_t kTouchPins[] = { 0, 1, 3, 4, 15, 16, 17, 18, 19, 22, 23 };
 // Which touch pins are being used for your controller? Associated with the pins just above.
-const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false };
+const bool kTouchPinsActive[] = { true, false, false, false, false, false, false, false, false, false, false };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
 const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false };
 // Threshold values relating to each of the touch pins.
