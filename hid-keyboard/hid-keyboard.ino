@@ -84,6 +84,7 @@ const bool kDebugBtnEvents   = true;
 // If false, they will be configured as buttons.
 const bool kTouchActive = true;
 
+//vvvvvvvvvvvvv TEENSY 3.1/3.2 ONLY vvvvvvvvvvvvv//
 #if defined(__MK20DX256__) // Using Teensy 3.1/3.2
 // Total count of touch sense pins we are managing.
 const uint8_t kTouchPinCount = 9;
@@ -102,7 +103,9 @@ const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_UP, KEY_LEFT, KE
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
 // Use one or more, separating with the logic OR operator. For example: MODIFIERKEY_CTRL | MODIFIERKEY_ALT
 const uint16_t kTouchMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+//^^^^^^^^^^^^^ TEENSY 3.1/3.2 ONLY ^^^^^^^^^^^^^//
 
+//vvvvvvvvvvvvv TEENSY LC ONLY vvvvvvvvvvvvv//
 #elif defined(__MKL26Z64__) // Using Teensy LC
 // Total count of touch sense pins we are managing.
 const uint8_t kTouchPinCount = 11;
@@ -122,10 +125,10 @@ const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP
 // Use one or more, separating with the logic OR operator. For example: MODIFIERKEY_CTRL | MODIFIERKEY_ALT
 const uint16_t kTouchMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
+//^^^^^^^^^^^^^ TEENSY LC ONLY ^^^^^^^^^^^^^//
 
 // How often in millis the debug print should print.
 uint16_t kTouchDebugMillis = 500;
-
 // Store the last values read from touch sense pins.
 uint16_t _touchLastVal[kTouchPinCount] = {0};
 // Store the last calculated state of our virtual touch buttons.
@@ -136,10 +139,10 @@ uint8_t _touchState[kTouchPinCount] = {0};
 uint32_t _touchLastDebounce[kTouchPinCount] = {0};
 // Store time in millis for last debug touch print.
 uint32_t _touchDebugTime = 0;
-
 // If we don't use touch, we need to store debouncing objects.
 Bounce* _touchButtons[kTouchPinCount];
 
+//vvvvvvvvvvvvv TEENSY 3.1/3.2 ONLY vvvvvvvvvvvvv//
 #if defined(__MK20DX256__) // Using Teensy 3.1/3.2
 // Total count of pins used for buttons.
 const uint8_t kButtonPinCount = 15;
@@ -155,7 +158,9 @@ const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_U
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
 // Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
 const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+//^^^^^^^^^^^^^ TEENSY 3.1/3.2 ONLY ^^^^^^^^^^^^^//
 
+//vvvvvvvvvvvvv TEENSY LC ONLY vvvvvvvvvvvvv//
 #elif defined(__MKL26Z64__) // Using Teensy LC
 // Total count of pins used for buttons.
 const uint8_t kButtonPinCount = 13;
@@ -171,10 +176,10 @@ const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_U
 // Use one or more, separating with the logic OR operator. For example: MODIFIER_CTRL | MODIFIER_ALT
 const uint16_t kButtonMods[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
+//^^^^^^^^^^^^^ TEENSY LC ONLY ^^^^^^^^^^^^^//
 
 // Store debouncing objects for buttons.
 Bounce* _buttons[kButtonPinCount];
-
 
 // The number of milliseconds to debounce touch sensing.
 const uint16_t kTchDebounceMillis = 10;
