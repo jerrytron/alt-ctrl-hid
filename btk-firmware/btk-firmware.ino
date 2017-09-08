@@ -1,5 +1,6 @@
 // See this link for a comprehensive guide:
 // https://www.pjrc.com/teensy/td_keyboard.html
+// Scroll down to All Keys Codes
 
 // MOUSE MOVEMENT
 //
@@ -76,9 +77,10 @@
 
 // Setting a debug bool to true means it will print
 // useful data to serial to help debug and configure.
-const bool kDebugTouchEvents = true;
-const bool kDebugTouchVals   = false;
-const bool kDebugBtnEvents   = true;
+const bool kDebugTouchEvents = true; // Prints touch sense down and release events.
+const bool kDebugTouchVals   = false; // Prints all touch pin values at an interval.
+const bool kDebugTouchValPlot = false; // Instead of text, prints values for graph plotting.
+const bool kDebugBtnEvents   = true; // Prints button down and release events.
 
 // If true, we are using touch sense pins as intended.
 // If false, they will be configured as buttons.
@@ -112,7 +114,7 @@ const uint8_t kTouchPinCount = 11;
 // All Touch Sense Pins: 0, 1, 3, 4, 15 - 19, 22, 23
 // The list of Teensy touch sense pin numbers.
 const uint8_t kTouchPins[] = { 0, 1, 3, 4, 15, 16, 17, 18, 19, 22, 23 };
-// Which touch pins are being used for your controller? Associated with the pins just above.
+// Which touch pins are being used for your controller? Associated with the pins just above.z
 const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false, false, false };
 // By default, a button is 'pressed' when a connection is made / it is shorted to ground. You can reverse that behavior for each pin.
 const bool kTouchPinsReverse[] = { false, false, false, false, false, false, false, false, false, false, false };
@@ -141,6 +143,8 @@ uint32_t _touchLastDebounce[kTouchPinCount] = {0};
 uint32_t _touchDebugTime = 0;
 // If we don't use touch, we need to store debouncing objects.
 Bounce* _touchButtons[kTouchPinCount];
+// Store the total number of active touch pins.
+uint8_t _activeTouchPins = 0;
 
 //vvvvvvvvvvvvv TEENSY 3.1/3.2 ONLY - BUTTONS vvvvvvvvvvvvv//
 #if defined(__MK20DX256__) // Using Teensy 3.1/3.2
@@ -203,6 +207,13 @@ void setup() {
     for (uint8_t i = 0; i < kTouchPinCount; ++i) {
       pinMode(kTouchPins[i], INPUT_PULLUP);
       _touchButtons[i] = new Bounce(kTouchPins[i], kBtnDebounceMillis);
+    }
+  } else {
+    // Count how many touch pins are active (set true).
+    for (uint8_t i = 0; i < kTouchPinCount; ++i) {
+      if (kTouchPinsActive[i]) {
+        _activeTouchPins++;
+      }
     }
   }
 
@@ -280,12 +291,19 @@ void loop() {
       }
     }
   } else {
+    // Set to true when interval is hit so we know to reset the timer.
+    bool debugPrinted = false;
+    // Track the active pin index so we know if we are at the end of the loop.
+    uint8_t activePinIndex = 0;
+    
     // Using touch sense pins.
     for (uint8_t i = 0; i < kTouchPinCount; ++i) {
       // Check to see if we are using this touch sense pin.
       // If not, skip it.
       if (!kTouchPinsActive[i]) {
-        //continue;
+        continue;
+      } else {
+        activePinIndex++;
       }
       
       // Get the current analogue value of the touch sense pin.
@@ -293,11 +311,20 @@ void loop() {
       
       if (kDebugTouchVals) {
         if ((millis() - _touchDebugTime) > kTouchDebugMillis) {
-          _touchDebugTime = millis();
-          Serial.print("Touch Value - Pin: ");
-          Serial.print(kTouchPins[i]);
-          Serial.print(", Read Val: ");
-          Serial.println(touchVal);
+          debugPrinted = true;
+          if (kDebugTouchValPlot) {
+            if (activePinIndex == _activeTouchPins) {
+              Serial.println(touchVal);
+            } else {
+              Serial.print(touchVal);
+              Serial.print("\t");
+            }
+          } else {
+            Serial.print("Touch Value - Pin: ");
+            Serial.print(kTouchPins[i]);
+            Serial.print(", Read Val: ");
+            Serial.println(touchVal);
+          }
         }
       }
       
@@ -344,6 +371,10 @@ void loop() {
       
       _touchLastVal[i] = touchVal;
       _touchLastState[i] = touchState;
+    }
+    // We printed debug values, reset the timer.
+    if (debugPrinted) {
+      _touchDebugTime = millis();
     }
   }
 
