@@ -77,10 +77,11 @@
 
 // Setting a debug bool to true means it will print
 // useful data to serial to help debug and configure.
-const bool kDebugTouchEvents = true; // Prints touch sense down and release events.
-const bool kDebugTouchVals   = false; // Prints all touch pin values at an interval.
+const bool kDebugTouchEvents  = true; // Prints touch sense down and release events.
+const bool kDebugTouchVals    = false; // Prints all touch pin values at an interval.
+// FYI: To use kDebugTouchValPlot, kDebugTouchVals must be true, kDebugTouchEvents & kDebugBtnEvents must be false.
 const bool kDebugTouchValPlot = false; // Instead of text, prints values for graph plotting.
-const bool kDebugBtnEvents   = true; // Prints button down and release events.
+const bool kDebugBtnEvents    = true; // Prints button down and release events.
 
 // If true, we are using touch sense pins as intended.
 // If false, they will be configured as buttons.
@@ -192,7 +193,7 @@ const uint16_t kTchDebounceMillis = 10;
 const uint16_t kBtnDebounceMillis = 10;
 
 // The millis to delay after each logic loop.
-const uint16_t kLoopDelay = 10;
+const uint16_t kLoopDelay = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -228,7 +229,7 @@ void loop() {
       if (kDebugBtnEvents) {
         Serial.print("Btn Press - Pin: ");
         Serial.print(kButtonPins[i]);
-        Serial.print(", Key Val: ");
+        Serial.print(", Key Code: ");
         Serial.println(kButtonKeys[i]);
       }
       if (kButtonPinsReverse[i]) {
@@ -242,7 +243,7 @@ void loop() {
       if (kDebugBtnEvents) {
         Serial.print("Btn Release - Pin: ");
         Serial.print(kButtonPins[i]);
-        Serial.print(", Key Val: ");
+        Serial.print(", Key Code: ");
         Serial.println(kButtonKeys[i]);
       }
       if (kButtonPinsReverse[i]) {
@@ -264,7 +265,7 @@ void loop() {
         if (kDebugBtnEvents) {
           Serial.print("TBtn Press - Pin: ");
           Serial.print(kTouchPins[i]);
-          Serial.print(", Key Val: ");
+          Serial.print(", Key Code: ");
           Serial.println(kTouchKeys[i]);
         }
         if (kTouchPinsReverse[i]) {
@@ -278,7 +279,7 @@ void loop() {
         if (kDebugBtnEvents) {
           Serial.print("TBtn Release - Pin: ");
           Serial.print(kTouchPins[i]);
-          Serial.print(", Key Val: ");
+          Serial.print(", Key Code: ");
           Serial.println(kTouchKeys[i]);
         }
         if (kTouchPinsReverse[i]) {
@@ -291,29 +292,35 @@ void loop() {
       }
     }
   } else {
-    // Set to true when interval is hit so we know to reset the timer.
-    bool debugPrinted = false;
+    // Store if the interval passed for outputting values.
+    bool debugOutput = false;
+    // Check if the frequency time has passed.
+    if ((millis() - _touchDebugTime) > kTouchDebugMillis) {
+      debugOutput = true;
+      _touchDebugTime = millis();
+    }
+    
     // Track the active pin index so we know if we are at the end of the loop.
     uint8_t activePinIndex = 0;
-    
+
     // Using touch sense pins.
-    for (uint8_t i = 0; i < kTouchPinCount; ++i) {
+    for (uint8_t i = 0; i < kTouchPinCount; i++) {
       // Check to see if we are using this touch sense pin.
       // If not, skip it.
       if (!kTouchPinsActive[i]) {
         continue;
-      } else {
-        activePinIndex++;
       }
       
       // Get the current analogue value of the touch sense pin.
       uint16_t touchVal = touchRead(kTouchPins[i]);
       
       if (kDebugTouchVals) {
-        if ((millis() - _touchDebugTime) > kTouchDebugMillis) {
-          debugPrinted = true;
+        if (debugOutput) {
+          activePinIndex++;
           if (kDebugTouchValPlot) {
-            if (activePinIndex == _activeTouchPins) {
+            Serial.print("index: ");
+            Serial.print(i);
+            if (activePinIndex >= _activeTouchPins) {
               Serial.println(touchVal);
             } else {
               Serial.print(touchVal);
@@ -351,7 +358,9 @@ void loop() {
             if (kDebugTouchEvents) {
               Serial.print("Touch Press - Pin: ");
               Serial.print(kTouchPins[i]);
-              Serial.print(", Key Val: ");
+              Serial.print(", Read Val: ");
+              Serial.print(touchVal);
+              Serial.print(", Key Code: ");
               Serial.println(kTouchKeys[i]);
             }
             Keyboard.set_modifier(kTouchMods[i]);
@@ -361,7 +370,9 @@ void loop() {
             if (kDebugTouchEvents) {
               Serial.print("Touch Release - Pin: ");
               Serial.print(kTouchPins[i]);
-              Serial.print(", Key Val: ");
+              Serial.print(", Read Val: ");
+              Serial.print(touchVal);
+              Serial.print(", Key Code: ");
               Serial.println(kTouchKeys[i]);
             }
             Keyboard.release(kTouchKeys[i]);
@@ -371,10 +382,6 @@ void loop() {
       
       _touchLastVal[i] = touchVal;
       _touchLastState[i] = touchState;
-    }
-    // We printed debug values, reset the timer.
-    if (debugPrinted) {
-      _touchDebugTime = millis();
     }
   }
 
