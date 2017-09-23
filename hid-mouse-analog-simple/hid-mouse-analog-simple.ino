@@ -35,14 +35,14 @@ void loop() {
   if (_updateElapsed >= kIntervalUpdateMillis) {
     _updateElapsed = 0;
 
-    int8_t movePixels = 0;
+    int movePixels = 0;
 
     // Read values from our analog pins. (0 - 1023 is the range).
-    int16_t value = analogRead(kAnalogPin);
+    int value = analogRead(kAnalogPin);
 
     // The maximum you can move the mouse for every update is -127 to 127.
-    // Since we are working with -512 to 511, we are going to use a special
-    // function called "map" that allows us to map one set of values onto another.
+    // We are going to use a special function called "map" that allows us
+    // to map one set of values onto another.
     // You can learn more about that function here: https://www.arduino.cc/en/Reference/Map
     movePixels = map(value, kMinReadValue, kMaxReadValue, kMinMouseMove, kMaxMouseMove);
 

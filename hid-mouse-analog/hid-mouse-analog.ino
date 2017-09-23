@@ -13,31 +13,31 @@ const bool kAxisXOff = false;
 const bool kAxisYOff = false;
 
 // The analog pin to read from for the X axis.
-const uint8_t kAnalogXPin = A0;
+const int kAnalogXPin = A0;
 
 // The analog pin to read from for the Y axis.
-const uint8_t kAnalogYPin = A1;
+const int kAnalogYPin = A1;
 
 // The minimum increment to have the mouse move.
-const int8_t kMinMouseMove = 1;
+const int kMinMouseMove = 1;
 
 // The maximum increment to have the mouse move.
-const int8_t kMaxMouseMove = 25;
+const int kMaxMouseMove = 25;
 
 // The low end of the movement 'dead zone'.
-const int16_t kMoveThresholdLow = -50;
+const int kMoveThresholdLow = -50;
 
 // The high end of the movement 'dead zone'.
-const int16_t kMoveThresholdHigh = 50;
+const int kMoveThresholdHigh = 50;
 
 // The amount of milliseconds before updating pot values.
-const uint16_t kIntervalReadMillis = 5;
+const int kIntervalReadMillis = 5;
 
 // The amount of milliseconds before updating the mouse.
-const uint16_t kIntervalUpdateMillis = 25;
+const int kIntervalUpdateMillis = 25;
 
 // The maximum value we will read from the analog pins.
-const uint16_t kOffsetValue = 512; // About half of the max read value.
+const int kOffsetValue = 512; // About half of the max read value.
 
 // The amount of milliseconds passed.
 // It auto-increments so don't forget to set it to 0!
@@ -45,10 +45,10 @@ elapsedMillis _readElapsed = 0;
 elapsedMillis _updateElapsed = 0;
 
 // The last move on the X axis.
-int8_t _lastMoveX = 0;
+int _lastMoveX = 0;
 
 // The last move on the Y axis.
-int8_t _lastMoveY = 0;
+int _lastMoveY = 0;
 
 void setup() {
 }
