@@ -2,7 +2,7 @@
 
 // A potentiometer generally has three posts / connection points
 // you want to use. One goes to ground, one goes to your voltage
-// (3.3V for the Teensy 3.2) and the final one (usually the middle post)
+// (3.3V for the Teensy LC or Teensy 3.2) and the final one (usually the middle post)
 // that goes to your analog pin for reading.
 
 // Debug logging enabled.
