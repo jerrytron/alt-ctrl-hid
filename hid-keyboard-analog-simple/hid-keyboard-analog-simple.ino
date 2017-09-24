@@ -5,7 +5,7 @@
 // (3.3V for the Teensy LC or Teensy 3.2) and the final one (usually the middle post)
 // that goes to your analog pin for reading.
 
-// This example should how you can press a keyboard button at different speeds using
+// This example will show how you can press a keyboard button at different speeds using
 // a potentiometer. We are using the right arrow as a simple way to see the effects.
 
 // The analog pin to read from to control a mouse axis.

@@ -38,7 +38,9 @@ const int kDebounceMillis = 10;
 // How long a temporary character should display until automatically removed.
 const int kTimeoutMillis = 1000;
 
-// Defining our button.
+// Defining our button - first argument is the digital pin, the second is
+// how many milliseconds to debounce. That means how long to wait before we
+// are sure the signal change isn't noise, but an ACTUAL press.
 Bounce _button = Bounce(kDigitalPin, kDebounceMillis);
 
 // The last index read by the potentiometer.
@@ -57,6 +59,12 @@ int _chars = 0;
 elapsedMillis _timeoutElapsed = 0;
 
 void setup() {
+  // Setup the digital pin our button is connected to.
+  // We want to use INPUT_PULLUP and not just INPUT
+  // because this tells the pin to stay at high voltage,
+  // so when the button is pressed (and connected to ground)
+  // it has a clean change from high voltage (3.3V here) and
+  // ground (0V).
   pinMode(kDigitalPin, INPUT_PULLUP);
 }
 
@@ -110,12 +118,12 @@ void loop() {
   }
 
   // Check the state of our button.
-  if (_button.fallingEdge()) {
+  if (_button.fallingEdge()) { // The button was pressed!
     // Commit the currently selected character index.
     Keyboard.press(kKeys[index]);
     // Reset the timeout so a temp character will still display.
     _timeoutElapsed = 0;
-  } else if (_button.risingEdge()) {
+  } else if (_button.risingEdge()) { // The button was released!
     Keyboard.release(kKeys[index]);
   }
 }
