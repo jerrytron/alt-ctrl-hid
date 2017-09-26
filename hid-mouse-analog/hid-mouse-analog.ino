@@ -72,6 +72,7 @@ void loop() {
     if (valueX < kMoveThresholdLow) {
       // Map our read value from one range to another. Our value range is about -50 to -512,
       // and we want the equivalent value in the range of our min and max mouse movement.
+      // You can learn more about that function here: https://www.arduino.cc/en/Reference/Map
       moveX = map(valueX, kMoveThresholdLow, -kOffsetValue, -kMinMouseMove, -kMaxMouseMove);
       if (kDebug && !kAxisXOff) {
         Serial.print("Value ");

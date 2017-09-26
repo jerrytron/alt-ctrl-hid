@@ -23,12 +23,9 @@ const int kMinPressInterval = 500;
 // The maximum interval speed for pressing keys.
 const int kMaxPressInterval = 10;
 
-// The amount of milliseconds passed.
-// It auto-increments so don't forget to set it to 0!
-elapsedMillis _updateElapsed = 0;
-
 // The interval in milliseconds for how quickly the keys will be pressed.
 elapsedMillis _keyPressElapsed = 0;
+
 // The current key press interval.
 int _keyPressInterval = 0;
 
@@ -39,6 +36,7 @@ void loop() {
   // Read values from our analog pins. (0 - 1023 is the range).
   int value = analogRead(kAnalogPin);
 
+  // You can learn more about that function here: https://www.arduino.cc/en/Reference/Map
   _keyPressInterval = map(value, kMinReadValue, kMaxReadValue, kMinPressInterval, kMaxPressInterval);
   
   // Only perform read logic every interval.
