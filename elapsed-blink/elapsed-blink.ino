@@ -20,6 +20,8 @@ elapsedMillis sinceBlinkMillis;
 
 // How much time has passed in microseconds.
 // 1000000 microseconds = 1000 milliseconds = 1 second
+// The example below is commented out, so just uncomment
+// it and comment out the current code in loop to try it.
 elapsedMicros sinceBlinkMicros;
 
 bool ledState = LOW;
@@ -34,7 +36,17 @@ void setup() {
   Keyboard.set_modifier(0);
   
   // Initialize the digital pin as an output.
-  pinMode(kLedPin, OUTPUT);     
+  pinMode(kLedPin, OUTPUT);
+
+  delay(2000);
+  // This code will simply print to the serial monitor
+  // (the magnifying glass button in the top right)
+  // which Teensy board you are using, in case you aren't sure!
+#if defined(__MK20DX256__) // Using Teensy 3.1/3.2
+  Serial.println("You are using a Teensy 3.1 or 3.2!");
+#elif defined(__MKL26Z64__) // Using Teensy LC
+  Serial.println("You are using a Teensy LC!");
+#endif
 }
 
 // the loop routine runs over and over again forever:
