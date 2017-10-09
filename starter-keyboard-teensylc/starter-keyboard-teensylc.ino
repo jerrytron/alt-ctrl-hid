@@ -29,9 +29,9 @@
 // useful data to serial to help debug and configure.
 const bool kDebugTouchEvents  = true; // Prints touch sense down and release events.
 const bool kDebugTouchVals    = false; // Prints all touch pin values at an interval.
-// FYI: To use kDebugTouchValPlot, kDebugTouchVals must be true, kDebugTouchEvents & kDebugBtnEvents must be false.
 const bool kDebugTouchValPlot = false; // Instead of text, prints values for graph plotting.
 const bool kDebugBtnEvents    = true; // Prints button down and release events.
+// ^^^ FYI: To use kDebugTouchValPlot, kDebugTouchVals must be true, kDebugTouchEvents & kDebugBtnEvents must be false.
 
 
 /*
