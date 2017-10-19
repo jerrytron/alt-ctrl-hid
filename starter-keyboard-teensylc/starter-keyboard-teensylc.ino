@@ -41,7 +41,7 @@ const bool kDebugBtnEvents    = true; // Prints button down and release events.
 /* Here is where you can change the key presses for your buttons. */
 // List which keyboard keys are associated with each digital pin.
 // The pin #s each index goes to:  2      5      6      7      8      9     10        11        12        13         14         20         21
-const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEY_ESC };
+const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEYPAD_1 };
 
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
