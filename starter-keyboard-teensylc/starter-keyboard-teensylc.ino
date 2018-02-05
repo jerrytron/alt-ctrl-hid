@@ -1,4 +1,4 @@
-#include <Bounce.h>
+#include <Bounce2.h>
 
 /*
  * Let's double check you are set to go!
@@ -153,15 +153,18 @@ elapsedMillis _updateElapsed = 0;
 
 void setup() {
   for (uint8_t i = 0; i < kButtonPinCount; ++i) {
-    pinMode(kButtonPins[i], INPUT_PULLUP);
-    _buttons[i] = new Bounce(kButtonPins[i], kBtnDebounceMillis);
+    _buttons[i] = new Bounce();
+    _buttons[i]->attach(kButtonPins[i], INPUT_PULLUP);
+    _buttons[i]->interval(kBtnDebounceMillis);
   }
 
   // If you don't want to use touch at all, set them up as buttons.
   if (kUseTouchAsButtons == true) {
     for (uint8_t i = 0; i < kTouchPinCount; ++i) {
       pinMode(kTouchPins[i], INPUT_PULLUP);
-      _touchButtons[i] = new Bounce(kTouchPins[i], kBtnDebounceMillis);
+      _touchButtons[i] = new Bounce();
+      _touchButtons[i]->attach(kTouchPins[i], INPUT_PULLUP);
+      _touchButtons[i]->interval(kBtnDebounceMillis);
     }
   } else {
     // Count how many touch pins are active (set true).
@@ -186,7 +189,7 @@ void loop() {
       bool pressed = false;
       bool released = false;
   
-      if (_buttons[i]->fallingEdge()) {
+      if (_buttons[i]->fell()) {
         if (kButtonPinsReverse[i]) {
           Keyboard.release(kButtonKeys[i]);
           released = true;
@@ -196,7 +199,7 @@ void loop() {
           Keyboard.set_modifier(0);
           pressed = true;
         }
-      } else if (_buttons[i]->risingEdge()) {
+      } else if (_buttons[i]->rose()) {
         if (kButtonPinsReverse[i]) {
           Keyboard.set_modifier(kButtonMods[i]);
           Keyboard.press(kButtonKeys[i]);
@@ -229,7 +232,7 @@ void loop() {
         bool pressed = false;
         bool released = false;
   
-        if (_touchButtons[i]->fallingEdge()) {
+        if (_touchButtons[i]->fell()) {
           if (kTouchPinsReverse[i]) {
             Keyboard.release(kTouchKeys[i]);
             released = true;
@@ -239,7 +242,7 @@ void loop() {
             Keyboard.set_modifier(0);
             pressed = true;
           }
-        } else if (_touchButtons[i]->risingEdge()) {
+        } else if (_touchButtons[i]->rose()) {
           if (kTouchPinsReverse[i]) {
             Keyboard.set_modifier(kTouchMods[i]);
             Keyboard.press(kTouchKeys[i]);
