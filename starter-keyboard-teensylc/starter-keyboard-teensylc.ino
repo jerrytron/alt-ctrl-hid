@@ -161,7 +161,6 @@ void setup() {
   // If you don't want to use touch at all, set them up as buttons.
   if (kUseTouchAsButtons == true) {
     for (uint8_t i = 0; i < kTouchPinCount; ++i) {
-      pinMode(kTouchPins[i], INPUT_PULLUP);
       _touchButtons[i] = new Bounce();
       _touchButtons[i]->attach(kTouchPins[i], INPUT_PULLUP);
       _touchButtons[i]->interval(kBtnDebounceMillis);
