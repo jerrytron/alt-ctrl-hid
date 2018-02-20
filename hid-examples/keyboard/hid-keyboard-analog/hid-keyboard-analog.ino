@@ -9,7 +9,7 @@
 // alphabet keyboard! You will turn the pot to select a letter which will briefly print
 // as text and delete itself, and press the button to keep the selected letter.
 
-#include <Bounce.h>
+#include <Bounce2.h>
 
 // Size of our keys array.
 const int kKeyCount = 26;
@@ -41,7 +41,7 @@ const int kTimeoutMillis = 1000;
 // Defining our button - first argument is the digital pin, the second is
 // how many milliseconds to debounce. That means how long to wait before we
 // are sure the signal change isn't noise, but an ACTUAL press.
-Bounce _button = Bounce(kDigitalPin, kDebounceMillis);
+Bounce _button = Bounce();
 
 // The last index read by the potentiometer.
 int _lastIndex = 0;
@@ -65,7 +65,8 @@ void setup() {
   // so when the button is pressed (and connected to ground)
   // it has a clean change from high voltage (3.3V here) and
   // ground (0V).
-  pinMode(kDigitalPin, INPUT_PULLUP);
+  _button.attach(kDigitalPin,INPUT_PULLUP)
+  _button.interval(kDebounceMillis)
 }
 
 void loop() {
@@ -118,12 +119,12 @@ void loop() {
   }
 
   // Check the state of our button.
-  if (_button.fallingEdge()) { // The button was pressed!
+  if (_button.fell()) { // The button was pressed!
     // Commit the currently selected character index.
     Keyboard.press(kKeys[index]);
     // Reset the timeout so a temp character will still display.
     _timeoutElapsed = 0;
-  } else if (_button.risingEdge()) { // The button was released!
+  } else if (_button.rose()) { // The button was released!
     Keyboard.release(kKeys[index]);
   }
 }
