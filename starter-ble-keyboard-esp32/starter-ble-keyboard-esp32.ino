@@ -169,7 +169,7 @@ Bounce* _buttons[kButtonPinCount];
 // It auto-increments so don't forget to set it to 0!
 elapsedMillis _updateElapsed = 0;
 // The bluetooth keyboard object.
-BleKeyboard Keyboard;
+BleKeyboard Keyboard("Alt Ctrl BLE Keyboard", "Jerrytron");
 /* ^^^ Don't touch this, it is where we store data while running. ^^^ */
 
 void setup() {
