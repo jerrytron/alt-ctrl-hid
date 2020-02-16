@@ -1,7 +1,6 @@
 #include <Bounce2.h>
 #include <BleKeyboard.h>
 #include <elapsedMillis.h>
-#include "keylayouts.h"
 
 /*
  * Let's double check you are set to go!
@@ -50,11 +49,12 @@ const bool kDebugBtnEvents    = true; // Prints button down and release events.
 /* Here is where you can change the key presses for your buttons. */
 // List which keyboard keys are associated with each digital pin.
 // The pin #s each index goes to:  26     25     34     39     36     5      18       19        16         17        21         23          22
-//const uint8_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEYPAD_1 };
-const uint8_t kButtonKeys[] = { 'w', 'a', 's', 'd', 'z', 'x', KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_DOWN_ARROW, KEY_RIGHT_ARROW, KEY_SPACE, KEY_ENTER, KEYPAD_1 };
+//const uint16_t kButtonKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_Z, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE, KEY_ENTER, KEYPAD_1 };
+// LOLIN32 Usable Button Pins
+const uint16_t kButtonKeys[] = {   'a',   'b',    0,     0,     0,   'c',    'd',     'e',      'f',       'g',      'h',       'i',        'j' };
 
-// The pin #s each index goes to:26    25    34    39    36     5    18     19     16     17     21     23     22
-const bool kBtnPinsActive[] = { true, true, true, true, true, true, true, true, true, true, true, true, true };
+// The pin #s each index goes to: 26    25    34    39    36     5    18     19     16     17     21     23     22
+const bool kBtnPinsActive[] =  { true, true, false, false, false, true, true, true, true, true, true, true, true }; // 34, 39, 36 not available
 
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
@@ -88,7 +88,8 @@ const bool kUseTouchAsButtons = false;
 // The pin #s each index goes to: T0    T1     T2      T3     T4     T5      T6        T7         T8         T9
 // The pin #s each index goes to:  4     0      2      15     13     12      14        27         33         32
 //const uint16_t kTouchKeys[] = { KEY_W, KEY_A, KEY_S, KEY_D, KEY_X, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_SPACE };
-const uint16_t kTouchKeys[] = { 'w', 'a', 's', 'd', 'z', 'x', KEY_UP_ARROW, KEY_LEFT_ARROW, KEY_DOWN_ARROW, KEY_RIGHT_ARROW, KEY_SPACE };
+// LOLIN32 Usable Touch Pins
+const uint16_t kTouchKeys[] = {   'k',   0,    'l',    'm',   'n',   'o',    'p',      'q',       'r',       's' };
 
 // List which modifier keys are to be used with the above key.
 // Four mod keys available: MODIFIERKEY_CTRL, MODIFIERKEY_SHIFT, MODIFIERKEY_ALT, MODIFIERKEY_GUI
@@ -108,7 +109,8 @@ const bool kTouchPinsReverse[] = { false, false, false, false, false, false, fal
 // Because touch sensing pins are subject to noise, you need to explicitely turn on which touch pins you want to use here.
 // The pin #s each index goes to:  T0     T1     T2     T3     T4     T5     T6     T7     T8     T9
 // The pin #s each index goes to:   4      0      2     15     13     12     14     27     33     32
-const bool kTouchPinsActive[] = { true,  false, true,  true,  true,  true,  true,  true,  true,  true };
+const bool kTouchPinsActive[] = { true,  false, true,  true,  true,  true,  true,  true,  true,  true }; // T1 isn't available.
+//const bool kTouchPinsActive[] = { false, false, false, false, false, false, false, false, false, false };
 
 // This is the threshold value for each pin. If touch sensing gets a value ABOVE this, it is triggered (like a button).
 // If it then gets a value below this, it is like that pretend button is released.
@@ -188,9 +190,11 @@ void setup() {
   // If you don't want to use touch at all, set them up as buttons.
   if (kUseTouchAsButtons == true) {
     for (uint8_t i = 0; i < kTouchPinCount; ++i) {
-      _touchButtons[i] = new Bounce();
-      _touchButtons[i]->attach(kTouchPins[i], INPUT_PULLUP);
-      _touchButtons[i]->interval(kBtnDebounceMillis);
+      if (kTouchPinsActive[i]) {
+        _touchButtons[i] = new Bounce();
+        _touchButtons[i]->attach(kTouchPins[i], INPUT_PULLUP);
+        _touchButtons[i]->interval(kBtnDebounceMillis);
+      }
     }
   } else {
     // Count how many touch pins are active (set true).
@@ -212,7 +216,7 @@ void loop() {
       _updateElapsed = 0;
       for (uint8_t i = 0; i < kButtonPinCount; ++i) {
 
-        // Check to see if we are using this touch sense pin.
+        // Check to see if we are using this button pin.
         // If not, skip it.
         if (!kBtnPinsActive[i]) {
           continue;
@@ -261,6 +265,12 @@ void loop() {
       // If you don't want to use touch at all, set them up as buttons.
       if (kUseTouchAsButtons == true) {
         for (uint8_t i = 0; i < kTouchPinCount; ++i) {
+          // Check to see if we are using this button pin.
+          // If not, skip it.
+          if (!kTouchPinsActive[i]) {
+            continue;
+          }
+          
           _touchButtons[i]->update();
     
           // Determine which event occurred for debugging.
