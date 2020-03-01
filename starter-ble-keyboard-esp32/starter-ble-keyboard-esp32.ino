@@ -116,6 +116,12 @@ const bool kTouchPinsActive[] = { true,  false, true,  true,  true,  true,  true
 // If it then gets a value below this, it is like that pretend button is released.
 // The pin #s each index goes to:      4   0   2  15  13  12  14  27  33  32
 const uint16_t kTouchThresholds[] = { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 };
+// ^ TIP: The default threshold '20' is perfect when you are over USB to a computer with wired power (or laptop with power adapter).
+//const uint16_t kTouchThresholds[] = { 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 };
+// ^ TIP: The default threshold '35' might be better over a USB to a laptop running on batter (try and see!).
+//const uint16_t kTouchThresholds[] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
+// ^ TIP: When running the ESP32 on battery you either need much higher thresholds (60+) which may not be enough,
+// or wire the ground pin to something metal.
 /* ^^^ These values are only if you are using touch sensing (kUseTouchAsButtons is FALSE). ^^^ */
 
 
